@@ -73,6 +73,9 @@ vim.opt.scrolloff = 20
 
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
+vim.o.wrap = true
+vim.o.linebreak = true
+
 --
 -- KEYMAPS
 --
@@ -811,6 +814,9 @@ require("lazy").setup({
 		enabled = true,
 		lazy = false,
 		init = function()
+			-- vim.g.neominimap = {
+			-- 	layout = "split",
+			-- }
 			vim.opt.wrap = false
 			vim.opt.sidescrolloff = 36
 		end,
