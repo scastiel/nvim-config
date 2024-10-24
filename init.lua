@@ -803,8 +803,8 @@ require("lazy").setup({
 	{
 		"voldikss/vim-floaterm",
 		keys = {
-			{ "<c-t>", mode = "n", ":FloatermToggle<cr>" },
-			{ "<c-t>", mode = "t", "<C-\\><C-n>:FloatermToggle<cr>" },
+			{ "<c-t>", mode = "n", ":FloatermToggle<cr>", silent = true },
+			{ "<c-t>", mode = "t", "<C-\\><C-n>:FloatermToggle<cr>", silent = true },
 		},
 	},
 
