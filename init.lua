@@ -816,6 +816,10 @@ require("lazy").setup({
 		version = "v3.*.*",
 		enabled = true,
 		lazy = false,
+		init = function()
+			vim.opt.wrap = false
+			vim.opt.sidescrolloff = 36
+		end,
 	},
 
 	{
@@ -841,7 +845,13 @@ require("lazy").setup({
 		"rmagatti/auto-session",
 		lazy = false,
 
-		opts = {},
+		opts = {
+			post_restore_cmds = {
+				function()
+					require("neo-tree.command").execute({ action = "show" })
+				end,
+			},
+		},
 	},
 
 	{
