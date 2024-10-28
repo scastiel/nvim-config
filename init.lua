@@ -144,6 +144,9 @@ require("lazy").setup({
 		requires = { "nvim-tree/nvim-web-devicons", "nvim-lua/plenary.nvim" },
 		config = function()
 			require("cybu").setup({
+				position = {
+					max_win_height = 20,
+				},
 				behavior = {
 					mode = {
 						default = {
