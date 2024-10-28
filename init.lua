@@ -138,6 +138,34 @@ require("lazy").setup({
 
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
 
+	{
+		"ghillb/cybu.nvim",
+		branch = "main",
+		requires = { "nvim-tree/nvim-web-devicons", "nvim-lua/plenary.nvim" },
+		config = function()
+			require("cybu").setup({
+				behavior = {
+					mode = {
+						default = {
+							switch = "on_close",
+							view = "paging",
+						},
+					},
+				},
+			})
+			vim.keymap.set("n", "<C-s-tab>", "<plug>(CybuLastusedPrev)")
+			vim.keymap.set("n", "<C-tab>", "<plug>(CybuLastusedNext)")
+		end,
+	},
+
+	{
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		config = true,
+		-- use opts = {} for passing setup options
+		-- this is equivalent to setup({}) function
+	},
+
 	{ -- Adds git related signs to the gutter, as well as utilities for managing changes
 		"lewis6991/gitsigns.nvim",
 		opts = {
@@ -382,7 +410,8 @@ require("lazy").setup({
 					-- or a suggestion from your LSP for this to activate.
 					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction", { "n", "x" })
 
-					map("<leader>h", vim.lsp.buf.hover, "Display Symbol Info ([H]over)")
+					map("<leader>is", vim.lsp.buf.hover, "Display [I]nformation on [S]ymbol")
+					map("<leader>id", vim.diagnostic.open_float, "Display [I]nformation on [D]iagnostic")
 
 					-- WARN: This is not Goto Definition, this is Goto Declaration.
 					--  For example, in C this would take you to the header.
@@ -577,9 +606,9 @@ require("lazy").setup({
 				-- python = { "isort", "black" },
 				--
 				-- You can use 'stop_after_first' to run the first available formatter from the list
-				-- javascript = { 'prettierd', 'prettier', stop_after_first = true },
-				-- typescript = { 'prettierd', 'prettier', stop_after_first = true },
-				typescriptreact = { "eslint", "prettier" },
+				javascript = { "prettier" },
+				typescript = { "prettier" },
+				typescriptreact = { "prettier" },
 			},
 		},
 	},
@@ -798,6 +827,13 @@ require("lazy").setup({
 		--    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
 		--    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
 		--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+	},
+
+	{
+		"windwp/nvim-ts-autotag",
+		config = function()
+			require("nvim-ts-autotag").setup()
+		end,
 	},
 
 	{
