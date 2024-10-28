@@ -117,6 +117,12 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+local get_option = vim.filetype.get_option
+vim.filetype.get_option = function(filetype, option)
+	return option == "commentstring" and require("ts_context_commentstring.internal").calculate_commentstring()
+		or get_option(filetype, option)
+end
+
 --
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -158,6 +164,15 @@ require("lazy").setup({
 			})
 			vim.keymap.set("n", "<C-s-tab>", "<plug>(CybuLastusedPrev)")
 			vim.keymap.set("n", "<C-tab>", "<plug>(CybuLastusedNext)")
+		end,
+	},
+
+	{
+		"JoosepAlviste/nvim-ts-context-commentstring",
+		config = function()
+			require("ts_context_commentstring").setup({
+				enable_autocmd = false,
+			})
 		end,
 	},
 
