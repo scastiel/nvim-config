@@ -142,6 +142,21 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
 
+	{
+		"danielfalk/smart-open.nvim",
+		branch = "0.2.x",
+		config = function()
+			require("telescope").load_extension("smart_open")
+		end,
+		dependencies = {
+			"kkharji/sqlite.lua",
+			-- Only required if using match_algorithm fzf
+			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+			-- Optional.  If installed, native fzy will be used when match_algorithm is fzy
+			{ "nvim-telescope/telescope-fzy-native.nvim" },
+		},
+	},
+
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
 
 	{
@@ -332,7 +347,10 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
 			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
 			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+			-- vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+			vim.keymap.set("n", "<leader><leader>", function()
+				require("telescope").extensions.smart_open.smart_open()
+			end, { desc = "[ ] Smart Open" })
 
 			builtin.buffers({ sort_lastused = true, ignore_current_buffer = true })
 
