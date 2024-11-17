@@ -73,6 +73,12 @@ vim.opt.scrolloff = 20
 
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.smartindent = true
+-- vim.opt.expandtab = true
+
 --
 -- KEYMAPS
 --
@@ -101,6 +107,9 @@ vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
 -- Shift-J/K to jump pages
 vim.keymap.set("n", "<S-j>", "<C-d>")
 vim.keymap.set("n", "<S-k>", "<C-u>")
+
+-- Remap ';' to ':'
+vim.keymap.set("n", ";", ":", { noremap = true })
 
 --
 -- AUTOCOMMAND
@@ -645,6 +654,7 @@ require("lazy").setup({
 				javascript = { "prettier" },
 				typescript = { "prettier" },
 				typescriptreact = { "prettier" },
+				markdown = { "prettier" },
 			},
 		},
 	},
@@ -767,26 +777,43 @@ require("lazy").setup({
 		end,
 	},
 
-	{ -- Color scheme
-		"folke/tokyonight.nvim",
-		priority = 1000, -- Make sure to load this before all the other start plugins.
-		init = function()
-			-- Load the colorscheme here.
-			-- Like many other themes, this one has different styles, and you could load
-			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-			-- vim.cmd.colorscheme("tokyonight-night")
-
-			-- You can configure highlights by doing something like:
-			vim.cmd.hi("Comment gui=none")
-		end,
-	},
+	-- { -- Color scheme
+	-- 	"folke/tokyonight.nvim",
+	-- 	priority = 1000, -- Make sure to load this before all the other start plugins.
+	-- 	init = function()
+	-- 		-- Load the colorscheme here.
+	-- 		-- Like many other themes, this one has different styles, and you could load
+	-- 		-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+	-- 		-- vim.cmd.colorscheme("tokyonight-night")
+	--
+	-- 		-- You can configure highlights by doing something like:
+	-- 		vim.cmd.hi("Comment gui=none")
+	-- 	end,
+	-- },
 
 	{
 		"catppuccin/nvim",
 		name = "catppuccin",
 		priority = 1000,
+		opts = {
+			color_overrides = {
+				mocha = {
+					base = "#000000",
+					mantle = "#000000",
+					crust = "#000000",
+				},
+			},
+		},
 		init = function()
 			vim.cmd.colorscheme("catppuccin")
+
+			require("catppuccin").setup({
+				flavour = "auto", -- latte, frappe, macchiato, mocha
+				background = { -- :h background
+					light = "latte",
+					dark = "mocha",
+				},
+			})
 		end,
 	},
 
@@ -908,8 +935,9 @@ require("lazy").setup({
 		},
 		init = function()
 			vim.g.barbar_auto_setup = false
-			vim.keymap.set({ "n", "v" }, "<c-s-tab>", "<Cmd>BufferPrevious<CR>")
-			vim.keymap.set({ "n", "v" }, "<c-tab>", "<Cmd>BufferNext<CR>")
+			-- vim.keymap.set({ "n", "v" }, "<c-s-tab>", "<Cmd>BufferPrevious<CR>")
+			-- vim.keymap.set({ "n", "v" }, "<c-tab>", "<Cmd>BufferNext<CR>")
+			vim.keymap.set({ "n" }, "<c-x>", "<Cmd>BufferClose<CR>")
 		end,
 		opts = {
 			-- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
