@@ -79,6 +79,8 @@ vim.opt.shiftwidth = 2
 vim.opt.smartindent = true
 -- vim.opt.expandtab = true
 
+vim.diagnostic.config({ virtual_text = false })
+
 --
 -- KEYMAPS
 --
@@ -98,18 +100,15 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
--- Disable arrow keys in normal mode
-vim.keymap.set("n", "<left>", '<cmd>echo "Use h to move!!"<CR>')
-vim.keymap.set("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
-vim.keymap.set("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
-vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
-
 -- Shift-J/K to jump pages
-vim.keymap.set("n", "<S-j>", "<C-d>")
-vim.keymap.set("n", "<S-k>", "<C-u>")
+-- vim.keymap.set("n", "<S-j>", "<C-d>")
+-- vim.keymap.set("n", "<S-k>", "<C-u>")
 
 -- Remap ';' to ':'
 vim.keymap.set("n", ";", ":", { noremap = true })
+
+-- Leader+W for ':w'
+vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { noremap = true })
 
 --
 -- AUTOCOMMAND
@@ -150,6 +149,28 @@ vim.opt.rtp:prepend(lazypath)
 --
 
 require("lazy").setup({
+	{
+		"rachartier/tiny-inline-diagnostic.nvim",
+		event = "VeryLazy", -- Or `LspAttach`
+		priority = 1000, -- needs to be loaded in first
+		config = function()
+			require("tiny-inline-diagnostic").setup()
+		end,
+	},
+
+	{
+		"karb94/neoscroll.nvim",
+		config = function()
+			neoscroll = require("neoscroll")
+			neoscroll.setup({})
+			vim.keymap.set("n", "<S-j>", function()
+				neoscroll.ctrl_d({ duration = 150 })
+			end)
+			vim.keymap.set("n", "<S-k>", function()
+				neoscroll.ctrl_u({ duration = 150 })
+			end)
+		end,
+	},
 
 	{
 		"danielfalk/smart-open.nvim",
@@ -167,6 +188,11 @@ require("lazy").setup({
 	},
 
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
+
+	{
+		"sphamba/smear-cursor.nvim",
+		opts = {},
+	},
 
 	{
 		"ghillb/cybu.nvim",
@@ -356,6 +382,7 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
 			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
 			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+			vim.keymap.set("n", "<leader>sc", builtin.commands, { desc = "[S]earch [C]ommands" })
 			-- vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
 			vim.keymap.set("n", "<leader><leader>", function()
 				require("telescope").extensions.smart_open.smart_open()
@@ -924,6 +951,9 @@ require("lazy").setup({
 		init = function()
 			vim.opt.wrap = false
 			vim.opt.sidescrolloff = 36
+			vim.g.neominimap = {
+				layout = "split",
+			}
 		end,
 	},
 
