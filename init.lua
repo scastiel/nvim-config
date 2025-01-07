@@ -108,7 +108,11 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 vim.keymap.set("n", ";", ":", { noremap = true })
 
 -- Leader+W for ':w'
-vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { noremap = true })
+-- vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { noremap = true })
+
+-- Indent with > and < but reselect the block after
+vim.api.nvim_set_keymap("x", ">", ">gv", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("x", "<", "<gv", { noremap = true, silent = true })
 
 --
 -- AUTOCOMMAND
@@ -189,10 +193,10 @@ require("lazy").setup({
 
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
 
-	{
-		"sphamba/smear-cursor.nvim",
-		opts = {},
-	},
+	-- {
+	-- 	"sphamba/smear-cursor.nvim",
+	-- 	opts = {},
+	-- },
 
 	{
 		"ghillb/cybu.nvim",
@@ -561,8 +565,21 @@ require("lazy").setup({
 				ts_ls = {
 					root_dir = function(fname)
 						local lspconfig = require("lspconfig")
-						return lspconfig.util.root_pattern("tsconfig.json")(fname)
-							or lspconfig.util.root_pattern("package.json", "jsconfig.json", ".git")(fname)
+
+						local denoRootDir = lspconfig.util.root_pattern("deno.json", "deno.jsonc")(fname)
+						if denoRootDir then
+							return nil
+						end
+
+						return lspconfig.util.root_pattern("package.json")(fname)
+					end,
+					single_file_support = false,
+				},
+
+				denols = {
+					root_dir = function(fname)
+						local lspconfig = require("lspconfig")
+						return lspconfig.util.root_pattern("deno.json", "deno.jsonc")(fname)
 					end,
 				},
 
@@ -822,15 +839,15 @@ require("lazy").setup({
 		"catppuccin/nvim",
 		name = "catppuccin",
 		priority = 1000,
-		opts = {
-			color_overrides = {
-				mocha = {
-					base = "#000000",
-					mantle = "#000000",
-					crust = "#000000",
-				},
-			},
-		},
+		-- opts = {
+		-- 	color_overrides = {
+		-- 		mocha = {
+		-- 			base = "#000000",
+		-- 			mantle = "#000000",
+		-- 			crust = "#000000",
+		-- 		},
+		-- 	},
+		-- },
 		init = function()
 			vim.cmd.colorscheme("catppuccin")
 
@@ -1032,6 +1049,9 @@ require("lazy").setup({
 						sidebar = "tab", -- sidebar is when position = left or right
 						current = "window", -- current is when position = current
 					},
+				},
+				window = {
+					width = 60,
 				},
 			})
 		end,
